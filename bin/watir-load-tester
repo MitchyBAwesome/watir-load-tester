@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+require 'watir-load-tester'
+usage = "\n"
+usage << "Usage: watir-load-tester [Script] [Itterations] [# of users] [Delay] [Logfile]\n\n"
+usage << "Script       The watir script you are testing\n\n"
+usage << "Itterations  How many times you want this script to run\n\t\tEmpty will default to 1\n\n"
+usage << "# of users   How many users you want to use\n\t\tEmpty will default to 1\n\n"
+usage << "Delay        How much time you want between users\n\t\tEmpty will default to 0\n\n"
+usage << "Logfile      Where you want your logfile to go to\n\t\tEmpty will default to current directory (load_test.log)\n\n"
+begin
+  case ARGV.count
+  when 0
+    puts usage
+  when 1
+    WatirLoadTester::load_test(ARGV[0])
+  when 2
+    WatirLoadTester::load_test(ARGV[0],ARGV[1].to_i)
+  when 3
+    WatirLoadTester::load_test(ARGV[0],ARGV[1].to_i,ARGV[2].to_i)
+  when 4
+    WatirLoadTester::load_test(ARGV[0],ARGV[1].to_i,ARGV[2].to_i,ARGV[3].to_i)
+  when 5
+    WatirLoadTester::load_test(ARGV[0],ARGV[1].to_i,ARGV[2].to_i,ARGV[3].to_i,ARGV[4])
+  end
+rescue Exception => e
+  puts usage
+  $stdout.puts e.message
+  $stdout.puts e.backtrace
+  exit 0
+end
