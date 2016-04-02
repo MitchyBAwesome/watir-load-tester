@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    watir-load-tester (0.0.1)
+    watir-load-tester (0.0.2)
+      watir-webdriver
 
 GEM
   remote: https://rubygems.org/

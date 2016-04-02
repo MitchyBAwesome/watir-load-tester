@@ -1,31 +1,46 @@
 #!/usr/bin/env ruby
 
 require 'watir-load-tester'
-usage = "\n"
-usage << "Usage: watir-load-tester [Script] [Itterations] [# of users] [Delay] [Logfile]\n\n"
-usage << "Script       The watir script you are testing\n\n"
-usage << "Itterations  How many times you want this script to run\n\t\tEmpty will default to 1\n\n"
-usage << "# of users   How many users you want to use\n\t\tEmpty will default to 1\n\n"
-usage << "Delay        How much time you want between users\n\t\tEmpty will default to 0\n\n"
-usage << "Logfile      Where you want your logfile to go to\n\t\tEmpty will default to current directory (load_test.log)\n\n"
-begin
-  case ARGV.count
-  when 0
-    puts usage
-  when 1
-    WatirLoadTester::load_test(ARGV[0])
-  when 2
-    WatirLoadTester::load_test(ARGV[0],ARGV[1].to_i)
-  when 3
-    WatirLoadTester::load_test(ARGV[0],ARGV[1].to_i,ARGV[2].to_i)
-  when 4
-    WatirLoadTester::load_test(ARGV[0],ARGV[1].to_i,ARGV[2].to_i,ARGV[3].to_i)
-  when 5
-    WatirLoadTester::load_test(ARGV[0],ARGV[1].to_i,ARGV[2].to_i,ARGV[3].to_i,ARGV[4])
+
+options = {}
+
+options[:testScript] = 'example/google_search.rb'
+options[:num_itterations] = 1
+options[:num_users] = 1
+options[:delay_between_users] = 0
+options[:log_file_name] = Dir.pwd + '/load_test.log'
+
+option_parser = OptionParser.new do | opts |
+
+  opts.banner = "Usage: watir-load-tester -s [Script] -i [Itterations] -u [# of users] -d [Delay] -l [Logfile]"
+
+  opts.on("-s SCRIPT","--script","The watir script you are testing") do | s |
+    options[:testScript] = s
   end
-rescue Exception => e
-  puts usage
-  $stdout.puts e.message
-  $stdout.puts e.backtrace
-  exit 0
-end
+
+  opts.on("-i ITTERATIONS","--itterations",Integer,"How many times you want this script to run. Empty will default to 1") do | i |
+    options[:num_itterations] = i
+  end
+
+  opts.on("-u USERS","--users",Integer,"How many users you want to use. Empty will default to 1") do | u |
+    options[:num_users] = u
+  end
+
+  opts.on("-d DELAY","--delay",Integer,"How much time you want between users. Empty will default to 0") do | d |
+    options[:delay_between_users] = d
+  end
+  
+  opts.on("-l LOGFILE","--logfile","Where you want your logfile to go to. Empty will default to current directory (load_test.log).") do | l |
+    options[:log_file_name] = l
+  end
+
+  opts.on('-h', '--help', 'Show the help screen') do
+      puts opts
+      exit
+  end
+  opts.parse
+end.parse!
+
+WatirLoadTester::load_test(options)
+
+
