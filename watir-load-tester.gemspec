@@ -11,4 +11,10 @@ Gem::Specification.new do |s|
   s.homepage                = 'https://github.com/enroxorz/watir-load-tester'
   s.license                 = 'Apache 2.0'
   s.required_ruby_version   = '>= 1.8.7'
+
+  s.files = ["bin/watir-load-tester"]
+  s.executables = ["watir-load-tester"]
+  s.bindir = "bin"
+  s.add_dependency('watir-webdriver')
+
 end

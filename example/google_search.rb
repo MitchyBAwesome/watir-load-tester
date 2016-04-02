@@ -1,13 +1,12 @@
-require 'watir-classic'
-require 'watir-classic/contrib/ie-new-process'
+require 'watir-webdriver'
 
-browser = Watir::IE.new_process
-browser.set_fast_speed
-
+browser = Watir::Browser.new
 searches = ['Watir','Watir Development Builds', 'Watir Performance Testing', 'Watir New Process', 'ruby-debug']
 browser.goto('google.com')
+
 searches.each do |search|
-  browser.text_field(:name => 'q').when_present.set(search)
-  browser.button(:name => 'btnG').when_present.click_no_wait
+  browser.text_field(:name => 'q').set search
+  browser.button(:name => 'btnG').click
 end
+
 browser.close
